@@ -85,7 +85,12 @@ async fn index_serves_html_to_browsers() {
     let body = res.into_body().collect().await.unwrap().to_bytes();
     let html = std::str::from_utf8(&body).unwrap();
     assert!(html.contains("srvcs.cloud"));
-    assert!(html.contains("Contact delivery microservice has not been implemented yet."));
+    assert!(html.contains("Building focused, composable services"));
+    assert!(html.contains("Flake-backed runtime"));
+    assert!(html.contains("Bugs &amp; service proposals"));
+    assert!(html.contains("Questions &amp; architecture debates"));
+    assert!(html.contains("Service Proposal awaiting ARB review"));
+    assert!(html.contains("new Date().getFullYear()"));
 }
 
 #[tokio::test]

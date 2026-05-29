@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#070b12" />
 <title>srvcs.cloud</title>
-<meta name="description" content="Focused, composable services for modern distributed systems." />
+<meta name="description" content="Building focused, composable services for modern distributed systems." />
 <link rel="icon" href="assets/srvcs-logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -96,7 +96,7 @@
   .group li .note { color: var(--faint); font-size: 13px; }
 
   /* ---------- contact ---------- */
-  #contact .row { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 38px 56px; align-items: start; }
+  #contact .row { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 38px 34px; align-items: start; }
   .contact-item .k { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
   .contact-item .v { margin-top: 10px; font-size: 17px; }
   .contact-item .v a { border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .15s; }
@@ -121,8 +121,27 @@
     transition: opacity .15s; white-space: nowrap;
   }
   .form button:hover { opacity: 0.88; }
-  .form .ack { font-family: var(--mono); font-size: 12.5px; color: var(--ok); opacity: 0; transition: opacity .25s; }
-  .form .ack.show { opacity: 1; }
+  .form button:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
+  }
+  .form button:disabled:hover { opacity: 0.42; }
+  .form .ack {
+    display: inline-flex; align-items: baseline; gap: 8px; min-height: 22px;
+    font-family: var(--mono); font-size: 12.5px; color: #ff6678; opacity: 0;
+    transform: translateX(0); transition: opacity .12s;
+  }
+  .form .ack strong {
+    color: #ff344f; font-weight: 700; text-transform: uppercase;
+  }
+  .form .ack .detail { color: #ff9aa6; }
+  .form .ack.show { opacity: 1; animation: error-shake .36s cubic-bezier(.36,.07,.19,.97) both; }
+  @keyframes error-shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+  }
 
   /* ---------- footer ---------- */
   footer { padding: 40px 0 60px; }
@@ -138,6 +157,8 @@
     section.block { padding: 64px 0; }
     .groups, #contact .row { grid-template-columns: 1fr; gap: 32px; }
     .form .grid { grid-template-columns: 1fr; }
+    .form .actions { align-items: flex-start; flex-direction: column; }
+    .form .ack { align-items: flex-start; flex-direction: column; gap: 3px; }
   }
 </style>
 </head>
@@ -159,8 +180,8 @@
   <main id="top">
     <section class="hero">
       <div class="wrap">
-        <h1>Focused, composable services for modern distributed systems. <span class="dim">One concern. One service. One deployment pipeline.</span></h1>
-        <p class="lede">srvcs builds narrowly-scoped operational primitives — observable by default, independently deployable, and engineered comfortably beyond the requirements of the task.</p>
+        <h1>Building focused, composable services for modern distributed systems. <span class="dim">One concern. One service. One deployment pipeline.</span></h1>
+        <p class="lede">We took a function and gave it a runtime boundary, a SLA, and a sense of self. Simple problems become focused, composable, independently deployable solutions.</p>
         <div class="meta">
           <a href="mailto:hello@srvcs.cloud">hello@srvcs.cloud</a>
           <span class="sep">·</span>
@@ -173,20 +194,20 @@
       <div class="wrap">
         <div class="sec-label">Capabilities</div>
         <h2 class="sec-head">What every service ships with.</h2>
-        <p class="sec-sub">One concern, fully instrumented, end to end.</p>
+        <p class="sec-sub">Narrowly scoped operational primitives with unnecessary confidence.</p>
         <div class="groups">
           <div class="group">
             <h3>Interface</h3>
             <ul>
-              <li><span class="n">01</span>OpenAPI documentation</li>
-              <li><span class="n">02</span>Health &amp; readiness endpoints</li>
-              <li><span class="n">03</span>Single-purpose API surface</li>
+              <li><span class="n">01</span>Single-purpose API surface</li>
+              <li><span class="n">02</span>OpenAPI documentation</li>
+              <li><span class="n">03</span>Health &amp; readiness endpoints</li>
             </ul>
           </div>
           <div class="group">
             <h3>Runtime</h3>
             <ul>
-              <li><span class="n">04</span>Containerized runtime</li>
+              <li><span class="n">04</span>Flake-backed runtime</li>
               <li><span class="n">05</span>Independently deployable</li>
               <li><span class="n">06</span>Deployment manifests</li>
             </ul>
@@ -195,7 +216,7 @@
             <h3>Observability</h3>
             <ul>
               <li><span class="n">07</span>Structured logging</li>
-              <li><span class="n">08</span>Metrics &amp; instrumentation</li>
+              <li><span class="n">08</span>Metrics support</li>
               <li><span class="n">09</span>Distributed tracing</li>
             </ul>
           </div>
@@ -203,8 +224,8 @@
             <h3>Delivery</h3>
             <ul>
               <li><span class="n">10</span>CI/CD workflows</li>
-              <li><span class="n">11</span>Cloud-native automation</li>
-              <li><span class="n">12</span>Included at no charge <span class="note">— technical debt</span></li>
+              <li><span class="n">11</span>Enterprise readiness</li>
+              <li><span class="n">12</span>Imposter syndrome, technical debt included</li>
             </ul>
           </div>
         </div>
@@ -240,16 +261,20 @@
     <section class="block" id="contact">
       <div class="wrap">
         <div class="sec-label">Contact</div>
-        <h2 class="sec-head">The best way to reach us.</h2>
-        <p class="sec-sub">We respond from us-east-1, usually.</p>
+        <h2 class="sec-head">Support surface, observable by default.</h2>
+        <p class="sec-sub">Issues handle bugs and service proposals. Discussions handle architecture debates. Everything else is available continuously.</p>
         <div class="row">
+          <div class="contact-item">
+            <div class="k">Issues</div>
+            <div class="v"><a href="https://github.com/srvcs/.github/issues" target="_blank" rel="noopener">Bugs &amp; service proposals</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="k">Discussions</div>
+            <div class="v"><a href="https://github.com/orgs/srvcs/discussions" target="_blank" rel="noopener">Questions &amp; architecture debates</a></div>
+          </div>
           <div class="contact-item">
             <div class="k">Email</div>
             <div class="v"><a href="mailto:hello@srvcs.cloud">hello@srvcs.cloud</a></div>
-          </div>
-          <div class="contact-item">
-            <div class="k">GitHub</div>
-            <div class="v"><a href="https://github.com/srvcs" target="_blank" rel="noopener">github.com/srvcs</a></div>
           </div>
         </div>
         <form class="form" id="contactForm">
@@ -274,7 +299,8 @@
           <div class="actions">
             <button type="submit">Send message</button>
             <span class="ack" id="ack" role="status" aria-live="polite">
-              Contact delivery microservice has not been implemented yet.
+              <strong>Error!</strong>
+              <span class="detail">contact.delivery returned 501 Not Implemented — Service Proposal awaiting ARB review.</span>
             </span>
           </div>
         </form>
@@ -285,8 +311,8 @@
   <footer>
     <div class="wrap foot-inner">
       <div class="foot-left">
-        © srvcs.cloud · 2026
-        <div class="sub">Made with far too many YAML files.</div>
+        © srvcs.cloud · <span id="year">2026</span>
+        <div class="sub">Made with 🩸 and far too many YAML files.</div>
       </div>
       <div class="foot-right">
         us-east-1
@@ -300,6 +326,7 @@
     const ack = document.getElementById('ack');
     const submit = form.querySelector('button[type="submit"]');
     const originalSubmit = submit.textContent;
+    document.getElementById('year').textContent = new Date().getFullYear();
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -309,13 +336,16 @@
       const message = document.getElementById('message').value.trim();
       if (!name || !email || !subject || !message) return;
 
-      submit.textContent = 'Not deployed';
+      submit.textContent = 'Failed';
+      submit.disabled = true;
       ack.classList.add('show');
-      clearTimeout(window.__ackT);
-      window.__ackT = setTimeout(() => {
-        ack.classList.remove('show');
-        submit.textContent = originalSubmit;
-      }, 6000);
+    });
+
+    form.addEventListener('input', () => {
+      if (!submit.disabled) return;
+      submit.disabled = false;
+      submit.textContent = originalSubmit;
+      ack.classList.remove('show');
     });
   </script>
 </body>
