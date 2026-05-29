@@ -90,6 +90,14 @@ async fn index_serves_html_to_browsers() {
     assert!(html.contains("Bugs &amp; service proposals"));
     assert!(html.contains("Questions &amp; architecture debates"));
     assert!(html.contains("Service Proposal awaiting ARB review"));
+    assert!(html.contains(r#"<link rel="canonical" href="https://srvcs.cloud/" />"#));
+    assert!(html.contains(r#"<meta property="og:type" content="website" />"#));
+    assert!(html.contains(r#"<meta property="og:image:width" content="1200" />"#));
+    assert!(html.contains(r#"<meta name="twitter:card" content="summary_large_image" />"#));
+    assert!(html.contains(
+        r#"<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />"#
+    ));
+    assert!(html.contains(r#"<link rel="manifest" href="/site.webmanifest" />"#));
     assert!(html.contains("new Date().getFullYear()"));
 }
 
@@ -111,6 +119,32 @@ async fn logo_asset_ok() {
         res.headers().get(header::CONTENT_TYPE).unwrap(),
         "image/png"
     );
+}
+
+#[tokio::test]
+async fn social_metadata_assets_ok() {
+    let app = router(telemetry::metrics_handle_for_tests());
+    for (uri, content_type) in [
+        ("/assets/srvcs-social.png", "image/png"),
+        ("/apple-touch-icon.png", "image/png"),
+        (
+            "/site.webmanifest",
+            "application/manifest+json; charset=utf-8",
+        ),
+    ] {
+        let res = app
+            .clone()
+            .oneshot(Request::builder().uri(uri).body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+
+        assert_eq!(res.status(), StatusCode::OK, "{uri}");
+        assert_eq!(
+            res.headers().get(header::CONTENT_TYPE).unwrap(),
+            content_type,
+            "{uri}"
+        );
+    }
 }
 
 #[tokio::test]

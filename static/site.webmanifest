@@ -1,0 +1,24 @@
+{
+  "name": "srvcs.cloud",
+  "short_name": "srvcs",
+  "description": "Building focused, composable services for modern distributed systems.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "minimal-ui",
+  "background_color": "#070b12",
+  "theme_color": "#3b8fee",
+  "icons": [
+    {
+      "src": "/assets/srvcs-logo.png",
+      "sizes": "3891x3891",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

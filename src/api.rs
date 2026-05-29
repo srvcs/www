@@ -8,6 +8,9 @@ use utoipa::{OpenApi, ToSchema};
 
 const INDEX_HTML: &str = include_str!("../static/index.html");
 const LOGO_PNG: &[u8] = include_bytes!("../static/assets/srvcs-logo.png");
+const SOCIAL_PNG: &[u8] = include_bytes!("../static/assets/srvcs-social.png");
+const APPLE_TOUCH_ICON_PNG: &[u8] = include_bytes!("../static/apple-touch-icon.png");
+const SITE_WEBMANIFEST: &str = include_str!("../static/site.webmanifest");
 const ROBOTS_TXT: &str = "User-agent: *\nAllow: /\n\nSitemap: https://srvcs.cloud/sitemap.xml\n";
 const SITEMAP_XML: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -49,9 +52,42 @@ pub async fn logo_png() -> impl IntoResponse {
     (
         [
             (header::CONTENT_TYPE, "image/png"),
-            (header::CACHE_CONTROL, "public, max-age=86400"),
+            (header::CACHE_CONTROL, "public, max-age=31536000, immutable"),
         ],
         LOGO_PNG,
+    )
+}
+
+pub async fn social_png() -> impl IntoResponse {
+    (
+        [
+            (header::CONTENT_TYPE, "image/png"),
+            (header::CACHE_CONTROL, "public, max-age=31536000, immutable"),
+        ],
+        SOCIAL_PNG,
+    )
+}
+
+pub async fn apple_touch_icon_png() -> impl IntoResponse {
+    (
+        [
+            (header::CONTENT_TYPE, "image/png"),
+            (header::CACHE_CONTROL, "public, max-age=31536000, immutable"),
+        ],
+        APPLE_TOUCH_ICON_PNG,
+    )
+}
+
+pub async fn site_webmanifest() -> impl IntoResponse {
+    (
+        [
+            (
+                header::CONTENT_TYPE,
+                "application/manifest+json; charset=utf-8",
+            ),
+            (header::CACHE_CONTROL, "public, max-age=86400"),
+        ],
+        SITE_WEBMANIFEST,
     )
 }
 
