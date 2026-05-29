@@ -33,19 +33,43 @@ the Nix command.
 See [`srvcs/platform`](https://github.com/srvcs/platform) for the shared service
 standard and CI workflow.
 
-## Promotion and previews
+## Preview workflow
 
-Main-branch builds publish `ghcr.io/srvcs/www:<sha>` and ask `srvcs/infra` to
-open a production promotion PR. This cross-repo request uses the
-`SRVCS_BOT_TOKEN` repository secret.
+Previews are maintainer opt-in.
 
-Pull request previews are maintainer opt-in. Add the `deploy-preview` label to a
-same-repository PR to publish `ghcr.io/srvcs/www:pr-<number>-<sha>` and ask
-infra to deploy it at:
+1. Open a PR from a branch inside `srvcs/www`.
+2. Add the `deploy-preview` label:
 
-```text
-https://www-pr-<number>.srvcs.cloud
-```
+   ```sh
+   gh pr edit <pr-number> --repo srvcs/www --add-label deploy-preview
+   ```
+
+3. CI publishes `ghcr.io/srvcs/www:pr-<number>-<sha>`.
+4. `srvcs/infra` deploys the preview and comments the URL on the PR:
+
+   ```text
+   https://www-pr-<number>.srvcs.cloud
+   ```
 
 Removing the label or closing the PR asks infra to destroy the preview
 namespace.
+
+Fork PRs do not receive previews automatically. Move the reviewed change to a
+branch inside `srvcs/www` before adding `deploy-preview`.
+
+## Production promotion
+
+Production is promoted through `srvcs/infra`, not directly from this repository.
+
+1. Merge the `srvcs/www` PR into `main`.
+2. CI publishes `ghcr.io/srvcs/www:<main-commit-sha>`.
+3. CI asks `srvcs/infra` to open or update a promotion PR.
+4. Merge the `srvcs/infra` promotion PR.
+5. Run the manual infra deploy workflow:
+
+   ```sh
+   gh workflow run deploy-prod.yml --repo srvcs/infra --ref main
+   ```
+
+This split keeps website source, image publishing, production desired state, and
+live deployment as separate steps.
