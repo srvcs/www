@@ -14,7 +14,30 @@ permissions:
 
 jobs:
   build:
-    uses: srvcs/platform/.github/workflows/build-service.yml@v1
+    uses: srvcs/platform/.github/workflows/build-service.yml@v2
     with:
       image-name: ${{ github.repository }}
       publish: true
+
+  request-production-promotion:
+    needs: build
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask infra to open a promotion PR
+        env:
+          GH_TOKEN: ${{ secrets.SRVCS_BOT_TOKEN }}
+          IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::notice::SRVCS_BOT_TOKEN is not set; skipping automated infra promotion PR."
+            exit 0
+          fi
+          gh workflow run promote-www.yml \
+            --repo srvcs/infra \
+            --ref main \
+            -f image="$IMAGE" \
+            -f source_repo="${{ github.repository }}" \
+            -f source_sha="$SOURCE_SHA"

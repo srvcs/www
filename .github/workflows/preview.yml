@@ -1,0 +1,72 @@
+name: Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled, closed]
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build-preview:
+    if: ${{ github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-preview') && github.event.pull_request.head.repo.full_name == github.repository }}
+    uses: srvcs/platform/.github/workflows/build-service.yml@v2
+    with:
+      image-name: ${{ github.repository }}
+      publish-preview: true
+      preview-tag: pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+
+  request-preview:
+    needs: build-preview
+    if: ${{ github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-preview') && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask infra to deploy preview
+        env:
+          GH_TOKEN: ${{ secrets.SRVCS_BOT_TOKEN }}
+          PREVIEW_IMAGE: ghcr.io/${{ github.repository }}:pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          test -n "${GH_TOKEN:-}" || {
+            echo "::error::SRVCS_BOT_TOKEN is required to request infra preview deployments."
+            exit 1
+          }
+          gh workflow run deploy-preview.yml \
+            --repo srvcs/infra \
+            --ref main \
+            -f service=www \
+            -f pr_number="${{ github.event.pull_request.number }}" \
+            -f image="$PREVIEW_IMAGE" \
+            -f source_repo="${{ github.repository }}" \
+            -f source_sha="${{ github.event.pull_request.head.sha }}"
+
+  destroy-preview:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && ((github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-preview')) || (github.event.action == 'unlabeled' && github.event.label.name == 'deploy-preview')) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask infra to destroy preview
+        env:
+          GH_TOKEN: ${{ secrets.SRVCS_BOT_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "${GH_TOKEN:-}" || {
+            echo "::error::SRVCS_BOT_TOKEN is required to request infra preview cleanup."
+            exit 1
+          }
+          gh workflow run destroy-preview.yml \
+            --repo srvcs/infra \
+            --ref main \
+            -f service=www \
+            -f pr_number="${{ github.event.pull_request.number }}" \
+            -f source_repo="${{ github.repository }}"
+
+  note-fork-preview:
+    if: ${{ github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-preview') && github.event.pull_request.head.repo.full_name != github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain skipped fork preview
+        run: |
+          echo "::warning::Preview deployments are skipped for fork pull requests. Move the reviewed change to a branch inside srvcs/www before applying deploy-preview."

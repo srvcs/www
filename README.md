@@ -32,3 +32,20 @@ the Nix command.
 
 See [`srvcs/platform`](https://github.com/srvcs/platform) for the shared service
 standard and CI workflow.
+
+## Promotion and previews
+
+Main-branch builds publish `ghcr.io/srvcs/www:<sha>` and ask `srvcs/infra` to
+open a production promotion PR. This cross-repo request uses the
+`SRVCS_BOT_TOKEN` repository secret.
+
+Pull request previews are maintainer opt-in. Add the `deploy-preview` label to a
+same-repository PR to publish `ghcr.io/srvcs/www:pr-<number>-<sha>` and ask
+infra to deploy it at:
+
+```text
+https://www-pr-<number>.srvcs.cloud
+```
+
+Removing the label or closing the PR asks infra to destroy the preview
+namespace.
