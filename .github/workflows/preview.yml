@@ -22,7 +22,7 @@ jobs:
   request-preview:
     needs: build-preview
     if: ${{ github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-preview') && github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Ask infra to deploy preview
         env:
@@ -45,7 +45,7 @@ jobs:
 
   destroy-preview:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository && ((github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-preview')) || (github.event.action == 'unlabeled' && github.event.label.name == 'deploy-preview')) }}
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Ask infra to destroy preview
         env:
@@ -65,7 +65,7 @@ jobs:
 
   note-fork-preview:
     if: ${{ github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy-preview') && github.event.pull_request.head.repo.full_name != github.repository }}
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Explain skipped fork preview
         run: |
