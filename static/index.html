@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#070b12" />
+<title>srvcs.cloud</title>
+<meta name="description" content="Focused, composable services for modern distributed systems." />
+<link rel="icon" href="assets/srvcs-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #070b12;
+    --text: #eef3fb;
+    --muted: #818d9f;
+    --faint: #4d5970;
+    --line: rgba(120,160,220,0.13);
+    --line-soft: rgba(120,160,220,0.08);
+    --accent: #3b8fee;
+    --ok: #2bb6c2;
+    --font: 'Schibsted Grotesk', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --col: 760px;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01";
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: rgba(59,143,238,0.30); }
+
+  .wrap { width: 100%; max-width: var(--col); margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav-inner { height: 60px; display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand img { width: 22px; height: 22px; display: block; }
+  .brand b { font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
+  .brand b span { color: var(--faint); font-weight: 500; }
+  .nav-links { display: flex; gap: 26px; }
+  .nav-links a { font-size: 14px; color: var(--muted); transition: color .15s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 132px 0 116px; border-bottom: 1px solid var(--line-soft); }
+  .status {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    letter-spacing: 0.01em; margin-bottom: 34px;
+  }
+  .status .d { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); position: relative; }
+  .status .d::after { content:""; position:absolute; inset:-4px; border-radius:50%; border:1px solid var(--ok); opacity:.5; animation: ring 2.6s ease-out infinite; }
+  @keyframes ring { 0%{transform:scale(.6);opacity:.6} 100%{transform:scale(1.9);opacity:0} }
+  .hero h1 {
+    font-size: 40px; font-weight: 600; line-height: 1.18; letter-spacing: -0.025em;
+    text-wrap: balance; max-width: 19ch;
+  }
+  .hero h1 .dim { color: var(--muted); }
+  .hero .lede {
+    margin-top: 26px; font-size: 17px; color: var(--muted); line-height: 1.6;
+    max-width: 54ch; text-wrap: pretty;
+  }
+  .hero .meta {
+    margin-top: 38px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px;
+    font-family: var(--mono); font-size: 13.5px;
+  }
+  .hero .meta a { color: var(--text); border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .15s, color .15s; }
+  .hero .meta a:hover { border-color: var(--accent); color: #fff; }
+  .hero .meta .sep { color: var(--faint); }
+
+  /* ---------- section ---------- */
+  section.block { padding: 84px 0; border-bottom: 1px solid var(--line-soft); }
+  .sec-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+  .sec-head { margin-top: 14px; font-size: 25px; font-weight: 600; letter-spacing: -0.02em; }
+  .sec-sub { margin-top: 8px; font-size: 16px; color: var(--muted); }
+
+  .groups { margin-top: 46px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 38px 56px; }
+  .group h3 { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+  .group ul { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .group li { font-size: 16px; color: var(--text); letter-spacing: -0.01em; display: flex; align-items: baseline; gap: 10px; }
+  .group li .n { font-family: var(--mono); font-size: 11px; color: var(--faint); min-width: 18px; }
+  .group li .note { color: var(--faint); font-size: 13px; }
+
+  /* ---------- contact ---------- */
+  #contact .row { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 38px 56px; align-items: start; }
+  .contact-item .k { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+  .contact-item .v { margin-top: 10px; font-size: 17px; }
+  .contact-item .v a { border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .15s; }
+  .contact-item .v a:hover { border-color: var(--accent); }
+  .form { margin-top: 40px; }
+  .form .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+  .field input, .field textarea {
+    width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--line);
+    color: var(--text); font-family: var(--font); font-size: 15px; padding: 11px 14px; border-radius: 8px;
+    outline: none; transition: border-color .15s; resize: vertical;
+  }
+  .field textarea { min-height: 132px; line-height: 1.55; }
+  .field input::placeholder, .field textarea::placeholder { color: var(--faint); }
+  .field input:focus, .field textarea:focus { border-color: rgba(59,143,238,0.6); }
+  .form .actions { margin-top: 20px; display: flex; align-items: center; gap: 18px; }
+  .form button {
+    background: var(--text); color: #0a0b0b; border: none; font-family: var(--font);
+    font-size: 14.5px; font-weight: 600; padding: 12px 22px; border-radius: 8px; cursor: pointer;
+    transition: opacity .15s; white-space: nowrap;
+  }
+  .form button:hover { opacity: 0.88; }
+  .form .ack { font-family: var(--mono); font-size: 12.5px; color: var(--ok); opacity: 0; transition: opacity .25s; }
+  .form .ack.show { opacity: 1; }
+
+  /* ---------- footer ---------- */
+  footer { padding: 40px 0 60px; }
+  .foot-inner { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .foot-left { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+  .foot-left .sub { margin-top: 6px; color: var(--faint); font-size: 11.5px; }
+  .foot-right { font-family: var(--mono); font-size: 12.5px; color: var(--faint); text-align: right; }
+
+  @media (max-width: 640px) {
+    .nav-links { gap: 18px; }
+    .hero { padding: 92px 0 80px; }
+    .hero h1 { font-size: 31px; }
+    section.block { padding: 64px 0; }
+    .groups, #contact .row { grid-template-columns: 1fr; gap: 32px; }
+    .form .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top">
+        <img src="assets/srvcs-logo.png" alt="srvcs logo" />
+        <b>srvcs<span>.cloud</span></b>
+      </a>
+      <nav class="nav-links">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#reliability">Reliability</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <h1>Focused, composable services for modern distributed systems. <span class="dim">One concern. One service. One deployment pipeline.</span></h1>
+        <p class="lede">srvcs builds narrowly-scoped operational primitives — observable by default, independently deployable, and engineered comfortably beyond the requirements of the task.</p>
+        <div class="meta">
+          <a href="mailto:hello@srvcs.cloud">hello@srvcs.cloud</a>
+          <span class="sep">·</span>
+          <a href="https://github.com/srvcs" target="_blank" rel="noopener">github</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="capabilities">
+      <div class="wrap">
+        <div class="sec-label">Capabilities</div>
+        <h2 class="sec-head">What every service ships with.</h2>
+        <p class="sec-sub">One concern, fully instrumented, end to end.</p>
+        <div class="groups">
+          <div class="group">
+            <h3>Interface</h3>
+            <ul>
+              <li><span class="n">01</span>OpenAPI documentation</li>
+              <li><span class="n">02</span>Health &amp; readiness endpoints</li>
+              <li><span class="n">03</span>Single-purpose API surface</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h3>Runtime</h3>
+            <ul>
+              <li><span class="n">04</span>Containerized runtime</li>
+              <li><span class="n">05</span>Independently deployable</li>
+              <li><span class="n">06</span>Deployment manifests</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h3>Observability</h3>
+            <ul>
+              <li><span class="n">07</span>Structured logging</li>
+              <li><span class="n">08</span>Metrics &amp; instrumentation</li>
+              <li><span class="n">09</span>Distributed tracing</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h3>Delivery</h3>
+            <ul>
+              <li><span class="n">10</span>CI/CD workflows</li>
+              <li><span class="n">11</span>Cloud-native automation</li>
+              <li><span class="n">12</span>Included at no charge <span class="note">— technical debt</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="reliability">
+      <div class="wrap">
+        <div class="sec-label">Reliability</div>
+        <h2 class="sec-head">High availability across trivial workloads.</h2>
+        <p class="sec-sub">No operation is too small for production-grade resilience.</p>
+        <div class="groups">
+          <div class="group">
+            <h3>Scaling</h3>
+            <ul>
+              <li>Horizontal scaling</li>
+              <li>Graceful degradation</li>
+              <li>Multi-region aspirations</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h3>Recovery</h3>
+            <ul>
+              <li>Retry policies</li>
+              <li>Distributed tracing</li>
+              <li>Incident retrospectives</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="contact">
+      <div class="wrap">
+        <div class="sec-label">Contact</div>
+        <h2 class="sec-head">The best way to reach us.</h2>
+        <p class="sec-sub">We respond from us-east-1, usually.</p>
+        <div class="row">
+          <div class="contact-item">
+            <div class="k">Email</div>
+            <div class="v"><a href="mailto:hello@srvcs.cloud">hello@srvcs.cloud</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="k">GitHub</div>
+            <div class="v"><a href="https://github.com/srvcs" target="_blank" rel="noopener">github.com/srvcs</a></div>
+          </div>
+        </div>
+        <form class="form" id="contactForm">
+          <div class="grid">
+            <div class="field">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Jane Operator" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@company.com" required />
+            </div>
+            <div class="field full">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" placeholder="Re: a problem that fits in one function" required />
+            </div>
+            <div class="field full">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Tell us which trivial workload needs production-grade resilience." required></textarea>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit">Send message</button>
+            <span class="ack" id="ack" role="status" aria-live="polite">
+              Contact delivery microservice has not been implemented yet.
+            </span>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot-inner">
+      <div class="foot-left">
+        © srvcs.cloud · 2026
+        <div class="sub">Made with far too many YAML files.</div>
+      </div>
+      <div class="foot-right">
+        us-east-1
+        <div class="sub" style="margin-top:6px;">(occasionally us-east-1, also us-east-1)</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const ack = document.getElementById('ack');
+    const submit = form.querySelector('button[type="submit"]');
+    const originalSubmit = submit.textContent;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if (!name || !email || !subject || !message) return;
+
+      submit.textContent = 'Not deployed';
+      ack.classList.add('show');
+      clearTimeout(window.__ackT);
+      window.__ackT = setTimeout(() => {
+        ack.classList.remove('show');
+        submit.textContent = originalSubmit;
+      }, 6000);
+    });
+  </script>
+</body>
+</html>

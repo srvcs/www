@@ -1,0 +1,47 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "srvcs-www",
+    "description": "",
+    "license": {
+      "name": "Apache-2.0",
+      "identifier": "Apache-2.0"
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [],
+        "operationId": "index",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Info"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Info": {
+        "type": "object",
+        "required": [
+          "service"
+        ],
+        "properties": {
+          "service": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
