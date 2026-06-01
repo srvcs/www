@@ -5277,13 +5277,7 @@
           "purpose": "OpenAPI document"
         }
       ],
-      "inputs": [
-        {
-          "name": "value",
-          "type": "json",
-          "required": true
-        }
-      ],
+      "inputs": [],
       "outputs": [
         {
           "name": "result",
