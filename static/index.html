@@ -139,6 +139,9 @@
   .group li .note { color: var(--faint); font-size: 13px; }
 
   /* ---------- catalog ---------- */
+  .catalog-wrap {
+    max-width: 1120px;
+  }
   .catalog-stats {
     margin-top: 34px;
     display: grid;
@@ -166,9 +169,9 @@
     color: var(--faint);
   }
   .catalog-tools {
-    margin-top: 34px;
+    margin-top: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 150px 170px;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
   .catalog-tools input,
@@ -190,58 +193,273 @@
   .catalog-tools select:focus {
     border-color: rgba(59,143,238,0.6);
   }
-  .graph-shell {
-    margin-top: 28px;
+  .catalog-panel {
+    margin-top: 34px;
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+  .catalog-browser,
+  .catalog-detail {
+    min-width: 0;
+  }
+  .catalog-results {
+    min-height: 32px;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--faint);
+  }
+  .catalog-results button,
+  .dep-pill {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    padding: 7px 9px;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .catalog-results button:hover,
+  .dep-pill:hover {
+    border-color: rgba(59,143,238,0.55);
+    color: var(--text);
+    background: rgba(59,143,238,0.08);
+  }
+  .catalog-list {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    max-height: 540px;
+    overflow: auto;
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
-    min-height: 390px;
+    scrollbar-color: var(--faint) transparent;
+  }
+  .service-row {
+    width: 100%;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line-soft);
+    color: inherit;
+    cursor: pointer;
+    display: grid;
+    gap: 6px;
+    padding: 13px 12px;
+    text-align: left;
+    transition: background .15s, box-shadow .15s;
+  }
+  .service-row:hover {
+    background: rgba(255,255,255,0.025);
+  }
+  .service-row[aria-selected="true"] {
+    background: rgba(59,143,238,0.10);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .service-row .topline,
+  .selected-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    min-width: 0;
+  }
+  .service-row .name {
+    min-width: 0;
     overflow: hidden;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .service-row .kind,
+  .selected-kind {
+    flex: 0 0 auto;
+    color: var(--ok);
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .service-row .fn {
+    color: var(--muted);
+    font-size: 13.5px;
+    min-width: 0;
+  }
+  .service-row .deps {
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+  }
+  .catalog-empty {
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 24px 12px;
+  }
+  .catalog-index-title {
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 14px 12px 10px;
+    text-transform: uppercase;
+  }
+  .category-index {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .category-button {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line-soft);
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px;
+    text-align: left;
+    transition: background .15s;
+  }
+  .category-button:hover {
+    background: rgba(255,255,255,0.025);
+  }
+  .category-name {
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    overflow-wrap: anywhere;
+  }
+  .category-count {
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .selection-summary {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    min-height: 182px;
+    padding: 20px 0;
+  }
+  .selected-title {
+    min-width: 0;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 18px;
+    overflow-wrap: anywhere;
+  }
+  .selected-function {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .selected-meta {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+  }
+  .selected-meta div {
+    min-width: 0;
+    background: var(--bg);
+    padding: 11px 12px;
+  }
+  .selected-meta .v {
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+  }
+  .selected-meta .k {
+    margin-top: 3px;
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .selected-chips,
+  .dependency-pills {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+  .selected-link {
+    display: inline-flex;
+    margin-top: 18px;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding-bottom: 2px;
+  }
+  .selected-link:hover {
+    border-color: var(--accent);
+  }
+  .graph-head {
+    margin-top: 28px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+  }
+  .graph-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .graph-summary {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .graph-shell {
+    margin-top: 12px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    max-height: 760px;
+    min-height: 420px;
+    overflow: auto;
+    scrollbar-color: var(--faint) transparent;
   }
   #depGraph {
     width: 100%;
-    height: 390px;
+    min-width: 760px;
+    height: 420px;
     display: block;
     background:
       linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
     background-size: 32px 32px;
-  }
-  .catalog-list {
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: 1fr;
-    border-top: 1px solid var(--line);
-  }
-  .service-row {
-    display: grid;
-    grid-template-columns: 160px 120px minmax(0, 1fr);
-    gap: 18px;
-    align-items: baseline;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--line-soft);
-  }
-  .service-row .name {
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--text);
-  }
-  .service-row .kind {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--ok);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .service-row .fn {
-    color: var(--muted);
-    min-width: 0;
-  }
-  .service-row .deps {
-    margin-top: 6px;
-    font-family: var(--mono);
-    font-size: 11.5px;
-    color: var(--faint);
-    overflow-wrap: anywhere;
   }
 
   /* ---------- contact ---------- */
@@ -302,6 +520,8 @@
   @media (max-width: 760px) {
     .nav-links { gap: 12px; }
     .nav-links a { font-size: 12px; }
+    .catalog-panel { grid-template-columns: 1fr; }
+    .catalog-list { max-height: 380px; }
   }
 
   @media (max-width: 520px) {
@@ -317,10 +537,27 @@
     .catalog-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .catalog-tools { grid-template-columns: 1fr; }
     .service-row { grid-template-columns: 1fr; gap: 5px; }
+    .selected-meta { grid-template-columns: 1fr; }
+    .graph-shell { max-height: 620px; }
     .groups, #contact .row { grid-template-columns: 1fr; gap: 32px; }
     .form .grid { grid-template-columns: 1fr; }
     .form .actions { align-items: flex-start; flex-direction: column; }
     .form .ack { align-items: flex-start; flex-direction: column; gap: 3px; }
+    footer { padding: 32px 0 44px; }
+    .foot-inner {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .foot-left,
+    .foot-right {
+      width: 100%;
+      text-align: left;
+    }
+    .foot-left .sub,
+    .foot-right .sub {
+      line-height: 1.55;
+    }
   }
 </style>
 </head>
@@ -333,8 +570,8 @@
       </a>
       <nav class="nav-links">
         <a href="#capabilities">Capabilities</a>
-        <a href="#catalog">Catalog</a>
         <a href="#reliability">Reliability</a>
+        <a href="#catalog">Catalog</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
@@ -422,7 +659,7 @@
     </section>
 
     <section class="block" id="catalog">
-      <div class="wrap">
+      <div class="wrap catalog-wrap">
         <div class="sec-label">Catalog</div>
         <h2 class="sec-head">The distributed standard library.</h2>
         <p class="sec-sub">Every service publishes the same metadata contract: name, function, dependencies, API, inputs, outputs, and runtime configuration.</p>
@@ -433,19 +670,36 @@
           <div class="stat"><div class="v" id="statOrchestrators">—</div><div class="k">Orchestrators</div></div>
           <div class="stat"><div class="v" id="statCategories">—</div><div class="k">Categories</div></div>
         </div>
-        <div class="catalog-tools">
-          <input id="serviceSearch" type="search" placeholder="Search services, functions, dependencies" autocomplete="off" />
-          <select id="kindFilter" aria-label="Filter by kind">
-            <option value="">All kinds</option>
-          </select>
-          <select id="categoryFilter" aria-label="Filter by category">
-            <option value="">All categories</option>
-          </select>
+        <div class="catalog-panel">
+          <div class="catalog-browser">
+            <div class="catalog-tools">
+              <input id="serviceSearch" type="search" placeholder="Search services, functions, dependencies" autocomplete="off" />
+              <select id="kindFilter" aria-label="Filter by kind">
+                <option value="">All kinds</option>
+              </select>
+              <select id="categoryFilter" aria-label="Filter by category">
+                <option value="">All categories</option>
+              </select>
+            </div>
+            <div class="catalog-results">
+              <span id="resultCount">Loading catalog</span>
+              <button id="clearSelection" type="button" hidden>Clear</button>
+            </div>
+            <div class="catalog-list" id="serviceList" role="listbox" aria-label="Services"></div>
+          </div>
+          <div class="catalog-detail">
+            <div class="selection-summary" id="serviceDetail" aria-live="polite"></div>
+            <div class="graph-head">
+              <div>
+                <div class="graph-title" id="graphTitle">Dependency tree</div>
+                <div class="graph-summary" id="graphSummary">No service selected</div>
+              </div>
+            </div>
+            <div class="graph-shell" aria-label="Dependency graph">
+              <svg id="depGraph" viewBox="0 0 760 420" role="img" aria-label="Dependency graph"></svg>
+            </div>
+          </div>
         </div>
-        <div class="graph-shell" aria-label="Dependency graph">
-          <svg id="depGraph" viewBox="0 0 760 390" role="img" aria-label="Dependency graph"></svg>
-        </div>
-        <div class="catalog-list" id="serviceList"></div>
       </div>
     </section>
 
@@ -518,19 +772,57 @@
     const submit = form.querySelector('button[type="submit"]');
     const originalSubmit = submit.textContent;
     document.getElementById('year').textContent = new Date().getFullYear();
-    const catalogState = { services: [], graph: { edges: [] } };
+    const catalogState = {
+      services: [],
+      graph: { edges: [] },
+      bySlug: new Map(),
+      reverseDeps: new Map(),
+      selectedSlug: ''
+    };
     const search = document.getElementById('serviceSearch');
     const kindFilter = document.getElementById('kindFilter');
     const categoryFilter = document.getElementById('categoryFilter');
     const serviceList = document.getElementById('serviceList');
+    const resultCount = document.getElementById('resultCount');
+    const clearSelection = document.getElementById('clearSelection');
+    const serviceDetail = document.getElementById('serviceDetail');
     const depGraph = document.getElementById('depGraph');
+    const graphTitle = document.getElementById('graphTitle');
+    const graphSummary = document.getElementById('graphSummary');
 
     const countBy = (items, test) => items.reduce((total, item) => total + (test(item) ? 1 : 0), 0);
     const uniq = (items) => [...new Set(items)].sort((a, b) => a.localeCompare(b));
     const svgEl = (name) => document.createElementNS('http://www.w3.org/2000/svg', name);
+    const depsFor = (service) => service?.dependencies || [];
+    const truncate = (value, length) => value.length > length ? `${value.slice(0, length - 1)}…` : value;
+
+    function el(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
 
     function setText(id, value) {
       document.getElementById(id).textContent = value.toLocaleString();
+    }
+
+    function buildIndexes(services) {
+      catalogState.bySlug = new Map(services.map((service) => [service.slug, service]));
+      catalogState.reverseDeps = new Map(services.map((service) => [service.slug, []]));
+
+      for (const service of services) {
+        for (const dep of depsFor(service)) {
+          if (!catalogState.reverseDeps.has(dep.slug)) {
+            catalogState.reverseDeps.set(dep.slug, []);
+          }
+          catalogState.reverseDeps.get(dep.slug).push(service.slug);
+        }
+      }
+
+      for (const dependents of catalogState.reverseDeps.values()) {
+        dependents.sort((a, b) => a.localeCompare(b));
+      }
     }
 
     function populateFilters(services) {
@@ -552,23 +844,74 @@
     function filteredServices() {
       const term = search.value.trim().toLowerCase();
       return catalogState.services.filter((service) => {
-        const deps = (service.dependencies || []).map((dep) => dep.slug).join(' ');
-        const haystack = `${service.name} ${service.slug} ${service.function} ${deps}`.toLowerCase();
+        const deps = depsFor(service).map((dep) => `${dep.slug} ${dep.service}`).join(' ');
+        const categories = (service.categories || []).join(' ');
+        const haystack = `${service.name} ${service.slug} ${service.function} ${service.kind} ${categories} ${deps}`.toLowerCase();
         return (!term || haystack.includes(term))
           && (!kindFilter.value || service.kind === kindFilter.value)
           && (!categoryFilter.value || (service.categories || []).includes(categoryFilter.value));
       });
     }
 
-    function renderList(services) {
-      serviceList.replaceChildren();
-      for (const service of services) {
-        const row = document.createElement('a');
-        row.className = 'service-row';
-        row.href = `https://github.com/${service.repository}`;
-        row.target = '_blank';
-        row.rel = 'noopener';
+    function filtersAreEmpty() {
+      return !search.value.trim() && !kindFilter.value && !categoryFilter.value;
+    }
 
+    function renderCategoryIndex() {
+      serviceList.replaceChildren();
+      serviceList.setAttribute('role', 'list');
+      resultCount.textContent = `${catalogState.services.length.toLocaleString()} services indexed`;
+
+      const counts = new Map();
+      for (const service of catalogState.services) {
+        for (const category of service.categories || []) {
+          counts.set(category, (counts.get(category) || 0) + 1);
+        }
+      }
+
+      const index = el('div', 'category-index');
+      for (const [category, count] of [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))) {
+        const button = el('button', 'category-button');
+        button.type = 'button';
+        button.addEventListener('click', () => {
+          categoryFilter.value = category;
+          renderCatalog();
+        });
+        button.append(
+          el('span', 'category-name', category),
+          el('span', 'category-count', count.toLocaleString())
+        );
+        index.append(button);
+      }
+
+      serviceList.append(el('div', 'catalog-index-title', 'Categories'), index);
+    }
+
+    function renderList(services) {
+      if (filtersAreEmpty() && !catalogState.selectedSlug) {
+        renderCategoryIndex();
+        return;
+      }
+
+      serviceList.replaceChildren();
+      serviceList.setAttribute('role', 'listbox');
+      resultCount.textContent = `${services.length.toLocaleString()} of ${catalogState.services.length.toLocaleString()} services`;
+
+      if (!services.length) {
+        serviceList.append(el('div', 'catalog-empty', 'No services match the current filters.'));
+        return;
+      }
+
+      for (const service of services) {
+        const row = document.createElement('button');
+        row.className = 'service-row';
+        row.type = 'button';
+        row.role = 'option';
+        row.dataset.slug = service.slug;
+        row.setAttribute('aria-selected', String(service.slug === catalogState.selectedSlug));
+        row.addEventListener('click', () => selectService(service.slug));
+
+        const topline = el('div', 'topline');
         const name = document.createElement('div');
         name.className = 'name';
         name.textContent = service.name;
@@ -576,102 +919,319 @@
         const kind = document.createElement('div');
         kind.className = 'kind';
         kind.textContent = service.kind;
+        topline.append(name, kind);
 
-        const body = document.createElement('div');
         const fn = document.createElement('div');
         fn.className = 'fn';
         fn.textContent = service.function;
         const deps = document.createElement('div');
         deps.className = 'deps';
-        deps.textContent = (service.dependencies || []).length
-          ? `depends on ${(service.dependencies || []).map((dep) => dep.service).join(', ')}`
+        deps.textContent = depsFor(service).length
+          ? `${depsFor(service).length.toLocaleString()} direct dependencies`
           : 'no dependencies';
-        body.append(fn, deps);
-        row.append(name, kind, body);
+        row.append(topline, fn, deps);
         serviceList.append(row);
       }
     }
 
-    function renderGraph(services) {
+    function buildDependencyClosure(rootSlug) {
+      const nodes = new Set();
+      const edges = [];
+      const visited = new Set();
+
+      function collect(slug) {
+        if (visited.has(slug)) return;
+        visited.add(slug);
+        nodes.add(slug);
+
+        const service = catalogState.bySlug.get(slug);
+        if (!service) return;
+
+        for (const dep of depsFor(service)) {
+          if (!dep.slug) continue;
+          nodes.add(dep.slug);
+          edges.push({ from: slug, to: dep.slug });
+          collect(dep.slug);
+        }
+      }
+
+      collect(rootSlug);
+
+      const edgeKeys = new Set();
+      const uniqueEdges = edges.filter((edge) => {
+        const key = `${edge.from}->${edge.to}`;
+        if (edgeKeys.has(key)) return false;
+        edgeKeys.add(key);
+        return true;
+      });
+
+      const adjacency = new Map();
+      for (const edge of uniqueEdges) {
+        if (!adjacency.has(edge.from)) adjacency.set(edge.from, []);
+        adjacency.get(edge.from).push(edge.to);
+      }
+
+      const levels = new Map([[rootSlug, 0]]);
+      const queue = [rootSlug];
+      for (let i = 0; i < queue.length; i += 1) {
+        const slug = queue[i];
+        const nextLevel = levels.get(slug) + 1;
+        for (const depSlug of adjacency.get(slug) || []) {
+          if (levels.has(depSlug) && levels.get(depSlug) <= nextLevel) continue;
+          levels.set(depSlug, nextLevel);
+          queue.push(depSlug);
+        }
+      }
+
+      for (const slug of nodes) {
+        if (!levels.has(slug)) levels.set(slug, 0);
+      }
+
+      return {
+        nodes: [...nodes],
+        edges: uniqueEdges,
+        levels,
+        maxDepth: Math.max(0, ...levels.values())
+      };
+    }
+
+    function selectService(slug) {
+      if (!catalogState.bySlug.has(slug)) return;
+      catalogState.selectedSlug = slug;
+      renderCatalog();
+    }
+
+    function renderDetail() {
+      const service = catalogState.bySlug.get(catalogState.selectedSlug);
+      serviceDetail.replaceChildren();
+      clearSelection.hidden = !service;
+
+      if (!service) {
+        const empty = el('div');
+        empty.append(
+          el('div', 'selected-title', 'No service selected'),
+          el('div', 'selected-function', `${catalogState.services.length.toLocaleString()} services indexed.`)
+        );
+        serviceDetail.append(empty);
+        renderGraph(null);
+        return;
+      }
+
+      const closure = buildDependencyClosure(service.slug);
+      const directDeps = depsFor(service);
+      const dependents = catalogState.reverseDeps.get(service.slug) || [];
+
+      const titleRow = el('div', 'selected-title-row');
+      titleRow.append(
+        el('div', 'selected-title', service.name),
+        el('div', 'selected-kind', service.kind)
+      );
+
+      const meta = el('div', 'selected-meta');
+      for (const [value, label] of [
+        [directDeps.length, 'Direct deps'],
+        [Math.max(0, closure.nodes.length - 1), 'Tree nodes'],
+        [dependents.length, 'Dependents']
+      ]) {
+        const item = el('div');
+        item.append(el('div', 'v', value.toLocaleString()), el('div', 'k', label));
+        meta.append(item);
+      }
+
+      const chips = el('div', 'selected-chips');
+      for (const category of service.categories || []) {
+        chips.append(el('span', 'chip', category));
+      }
+
+      const dependencyPills = el('div', 'dependency-pills');
+      for (const dep of directDeps) {
+        const pill = el('button', 'dep-pill', dep.service || dep.slug);
+        pill.type = 'button';
+        pill.addEventListener('click', () => selectService(dep.slug));
+        dependencyPills.append(pill);
+      }
+      if (!directDeps.length) {
+        dependencyPills.append(el('span', 'chip', 'no dependencies'));
+      }
+
+      const repo = el('a', 'selected-link', 'View repository');
+      repo.href = `https://github.com/${service.repository}`;
+      repo.target = '_blank';
+      repo.rel = 'noopener';
+
+      serviceDetail.append(
+        titleRow,
+        el('div', 'selected-function', service.function),
+        meta,
+        chips,
+        dependencyPills,
+        repo
+      );
+      renderGraph(service);
+    }
+
+    function resetGraph(width = 760, height = 420) {
       depGraph.replaceChildren();
-      const visible = services
-        .filter((service) => (service.dependencies || []).length)
-        .slice(0, 28);
-      const depCounts = new Map();
-      for (const service of visible) {
-        for (const dep of service.dependencies || []) {
-          depCounts.set(dep.slug, (depCounts.get(dep.slug) || 0) + 1);
-        }
-      }
-      const depNodes = [...depCounts.entries()]
-        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-        .slice(0, 22)
-        .map(([slug]) => slug);
-      const depY = new Map(depNodes.map((slug, i) => [slug, 42 + i * (306 / Math.max(1, depNodes.length - 1))]));
-      const serviceY = new Map(visible.map((service, i) => [service.slug, 42 + i * (306 / Math.max(1, visible.length - 1))]));
+      depGraph.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      depGraph.style.minWidth = `${width}px`;
+      depGraph.style.width = width <= 760 ? '100%' : `${width}px`;
+      depGraph.style.height = `${height}px`;
+    }
 
-      const title = svgEl('text');
-      title.setAttribute('x', '24');
-      title.setAttribute('y', '24');
-      title.setAttribute('fill', '#818d9f');
-      title.setAttribute('font-size', '12');
-      title.setAttribute('font-family', 'JetBrains Mono, monospace');
-      title.textContent = `${services.length} matching services · ${visible.length} rendered with dependencies`;
-      depGraph.append(title);
+    function graphText(x, y, text, size = 12, fill = '#818d9f') {
+      const node = svgEl('text');
+      node.setAttribute('x', x);
+      node.setAttribute('y', y);
+      node.setAttribute('fill', fill);
+      node.setAttribute('font-size', size);
+      node.setAttribute('font-family', 'JetBrains Mono, monospace');
+      node.textContent = text;
+      return node;
+    }
 
-      for (const service of visible) {
-        const y1 = serviceY.get(service.slug);
-        for (const dep of service.dependencies || []) {
-          if (!depY.has(dep.slug)) continue;
-          const y2 = depY.get(dep.slug);
-          const path = svgEl('path');
-          path.setAttribute('d', `M 170 ${y1} C 310 ${y1}, 450 ${y2}, 590 ${y2}`);
-          path.setAttribute('fill', 'none');
-          path.setAttribute('stroke', 'rgba(59,143,238,0.28)');
-          path.setAttribute('stroke-width', '1');
-          depGraph.append(path);
-        }
+    function renderGraph(service) {
+      if (!service) {
+        graphTitle.textContent = 'Dependency tree';
+        graphSummary.textContent = 'No service selected';
+        resetGraph();
+        depGraph.append(
+          graphText(28, 58, 'No service selected', 14, '#eef3fb'),
+          graphText(28, 84, `${catalogState.services.length.toLocaleString()} services indexed; graph rendering is idle.`, 12, '#818d9f')
+        );
+        return;
       }
 
-      for (const service of visible) {
-        const y = serviceY.get(service.slug);
-        const dot = svgEl('circle');
-        dot.setAttribute('cx', '170');
-        dot.setAttribute('cy', y);
-        dot.setAttribute('r', '4');
-        dot.setAttribute('fill', '#2bb6c2');
-        const text = svgEl('text');
-        text.setAttribute('x', '24');
-        text.setAttribute('y', y + 4);
-        text.setAttribute('fill', '#eef3fb');
-        text.setAttribute('font-size', '11');
-        text.setAttribute('font-family', 'JetBrains Mono, monospace');
-        text.textContent = service.slug;
-        depGraph.append(dot, text);
+      const closure = buildDependencyClosure(service.slug);
+      const groups = new Map();
+      for (const slug of closure.nodes) {
+        const level = closure.levels.get(slug) || 0;
+        if (!groups.has(level)) groups.set(level, []);
+        groups.get(level).push(slug);
       }
 
-      for (const slug of depNodes) {
-        const y = depY.get(slug);
-        const dot = svgEl('circle');
-        dot.setAttribute('cx', '590');
-        dot.setAttribute('cy', y);
-        dot.setAttribute('r', '4');
-        dot.setAttribute('fill', '#3b8fee');
-        const text = svgEl('text');
-        text.setAttribute('x', '606');
-        text.setAttribute('y', y + 4);
-        text.setAttribute('fill', '#eef3fb');
-        text.setAttribute('font-size', '11');
-        text.setAttribute('font-family', 'JetBrains Mono, monospace');
-        text.textContent = slug;
-        depGraph.append(dot, text);
+      for (const slugs of groups.values()) {
+        slugs.sort((a, b) => {
+          if (a === service.slug) return -1;
+          if (b === service.slug) return 1;
+          return a.localeCompare(b);
+        });
+      }
+
+      const nodeW = 164;
+      const nodeH = 46;
+      const colGap = 220;
+      const rowGap = 74;
+      const padX = 34;
+      const padY = 58;
+      const maxLevel = Math.max(0, ...groups.keys());
+      const maxRows = Math.max(1, ...[...groups.values()].map((slugs) => slugs.length));
+      const width = Math.max(760, padX * 2 + nodeW + maxLevel * colGap + 40);
+      const height = Math.max(420, padY * 2 + Math.max(0, maxRows - 1) * rowGap + nodeH);
+      const positions = new Map();
+
+      resetGraph(width, height);
+      graphTitle.textContent = `${service.slug} dependencies`;
+      graphSummary.textContent = `${closure.nodes.length.toLocaleString()} services · ${closure.edges.length.toLocaleString()} edges · ${(closure.maxDepth + 1).toLocaleString()} levels`;
+
+      const defs = svgEl('defs');
+      const marker = svgEl('marker');
+      marker.setAttribute('id', 'arrow');
+      marker.setAttribute('viewBox', '0 0 10 10');
+      marker.setAttribute('refX', '8');
+      marker.setAttribute('refY', '5');
+      marker.setAttribute('markerWidth', '5');
+      marker.setAttribute('markerHeight', '5');
+      marker.setAttribute('orient', 'auto-start-reverse');
+      const markerPath = svgEl('path');
+      markerPath.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
+      markerPath.setAttribute('fill', 'rgba(59,143,238,0.62)');
+      marker.append(markerPath);
+      defs.append(marker);
+      depGraph.append(defs);
+
+      for (const [level, slugs] of groups) {
+        const x = padX + level * colGap;
+        const offset = ((maxRows - slugs.length) * rowGap) / 2;
+        slugs.forEach((slug, index) => {
+          positions.set(slug, {
+            x,
+            y: padY + offset + index * rowGap
+          });
+        });
+      }
+
+      for (const edge of closure.edges) {
+        const from = positions.get(edge.from);
+        const to = positions.get(edge.to);
+        if (!from || !to) continue;
+        const startX = from.x + nodeW;
+        const startY = from.y + nodeH / 2;
+        const endX = to.x;
+        const endY = to.y + nodeH / 2;
+        const midX = startX + Math.max(42, (endX - startX) / 2);
+        const path = svgEl('path');
+        path.setAttribute('d', `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', 'rgba(59,143,238,0.34)');
+        path.setAttribute('stroke-width', '1.2');
+        path.setAttribute('marker-end', 'url(#arrow)');
+        depGraph.append(path);
+      }
+
+      for (const slug of closure.nodes) {
+        const pos = positions.get(slug);
+        if (!pos) continue;
+        const nodeService = catalogState.bySlug.get(slug);
+        const isRoot = slug === service.slug;
+        const group = svgEl('g');
+        group.style.cursor = 'pointer';
+        group.addEventListener('click', () => selectService(slug));
+
+        const title = svgEl('title');
+        title.textContent = nodeService ? `${nodeService.name}: ${nodeService.function}` : slug;
+        const rect = svgEl('rect');
+        rect.setAttribute('x', pos.x);
+        rect.setAttribute('y', pos.y);
+        rect.setAttribute('width', nodeW);
+        rect.setAttribute('height', nodeH);
+        rect.setAttribute('rx', '8');
+        rect.setAttribute('fill', isRoot ? 'rgba(59,143,238,0.18)' : 'rgba(7,11,18,0.94)');
+        rect.setAttribute('stroke', isRoot ? '#3b8fee' : 'rgba(120,160,220,0.22)');
+        rect.setAttribute('stroke-width', isRoot ? '1.4' : '1');
+
+        const label = graphText(pos.x + 12, pos.y + 19, truncate(slug, 19), 11.5, '#eef3fb');
+        const kind = graphText(pos.x + 12, pos.y + 35, nodeService?.kind || 'external', 10, isRoot ? '#2bb6c2' : '#818d9f');
+        group.append(title, rect, label, kind);
+        depGraph.append(group);
       }
     }
 
     function renderCatalog() {
       const services = filteredServices();
-      renderGraph(services);
       renderList(services);
+      renderDetail();
+    }
+
+    clearSelection.addEventListener('click', () => {
+      catalogState.selectedSlug = '';
+      renderCatalog();
+    });
+
+    function handleFilterChange() {
+      renderCatalog();
+    }
+
+    for (const control of [search, kindFilter, categoryFilter]) {
+      control.addEventListener('input', handleFilterChange);
+      control.addEventListener('change', handleFilterChange);
+    }
+
+    function renderCatalogError() {
+      depGraph.replaceChildren();
+      serviceList.replaceChildren(el('div', 'catalog-empty', 'Catalog failed to load.'));
+      serviceDetail.replaceChildren(el('div', 'selected-function', 'Catalog failed to load.'));
+      resultCount.textContent = 'Unavailable';
+      graphSummary.textContent = 'Catalog unavailable';
     }
 
     fetch('/services.json')
@@ -679,6 +1239,7 @@
       .then((catalog) => {
         catalogState.services = catalog.services || [];
         catalogState.graph = catalog.graph || { edges: [] };
+        buildIndexes(catalogState.services);
         setText('statServices', catalogState.services.length);
         setText('statEdges', (catalogState.graph.edges || []).length);
         setText('statLeaf', countBy(catalogState.services, (service) => service.kind === 'leaf'));
@@ -686,12 +1247,8 @@
         setText('statCategories', uniq(catalogState.services.flatMap((service) => service.categories || [])).length);
         populateFilters(catalogState.services);
         renderCatalog();
-      });
-
-    for (const control of [search, kindFilter, categoryFilter]) {
-      control.addEventListener('input', renderCatalog);
-      control.addEventListener('change', renderCatalog);
-    }
+      })
+      .catch(renderCatalogError);
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
