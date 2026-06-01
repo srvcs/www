@@ -138,6 +138,112 @@
   .group li .n { font-family: var(--mono); font-size: 11px; color: var(--faint); min-width: 18px; }
   .group li .note { color: var(--faint); font-size: 13px; }
 
+  /* ---------- catalog ---------- */
+  .catalog-stats {
+    margin-top: 34px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    border: 1px solid var(--line);
+    background: var(--line);
+  }
+  .stat {
+    min-width: 0;
+    background: var(--bg);
+    padding: 16px 14px;
+  }
+  .stat .v {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--text);
+  }
+  .stat .k {
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .catalog-tools {
+    margin-top: 34px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px 170px;
+    gap: 12px;
+  }
+  .catalog-tools input,
+  .catalog-tools select {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 11px 12px;
+    border-radius: 8px;
+    outline: none;
+  }
+  .catalog-tools select {
+    color-scheme: dark;
+  }
+  .catalog-tools input:focus,
+  .catalog-tools select:focus {
+    border-color: rgba(59,143,238,0.6);
+  }
+  .graph-shell {
+    margin-top: 28px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    min-height: 390px;
+    overflow: hidden;
+  }
+  #depGraph {
+    width: 100%;
+    height: 390px;
+    display: block;
+    background:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .catalog-list {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--line);
+  }
+  .service-row {
+    display: grid;
+    grid-template-columns: 160px 120px minmax(0, 1fr);
+    gap: 18px;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .service-row .name {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text);
+  }
+  .service-row .kind {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ok);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .service-row .fn {
+    color: var(--muted);
+    min-width: 0;
+  }
+  .service-row .deps {
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--faint);
+    overflow-wrap: anywhere;
+  }
+
   /* ---------- contact ---------- */
   #contact .row { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 38px 34px; align-items: start; }
   .contact-item .k { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
@@ -193,11 +299,24 @@
   .foot-left .sub { margin-top: 6px; color: var(--faint); font-size: 11.5px; }
   .foot-right { font-family: var(--mono); font-size: 12.5px; color: var(--faint); text-align: right; }
 
+  @media (max-width: 760px) {
+    .nav-links { gap: 12px; }
+    .nav-links a { font-size: 12px; }
+  }
+
+  @media (max-width: 520px) {
+    .nav-links a[href="#capabilities"],
+    .nav-links a[href="#reliability"] { display: none; }
+  }
+
   @media (max-width: 640px) {
-    .nav-links { gap: 18px; }
+    .nav-links { gap: 12px; }
     .hero { padding: 92px 0 80px; }
     .hero h1 { font-size: 31px; }
     section.block { padding: 64px 0; }
+    .catalog-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .catalog-tools { grid-template-columns: 1fr; }
+    .service-row { grid-template-columns: 1fr; gap: 5px; }
     .groups, #contact .row { grid-template-columns: 1fr; gap: 32px; }
     .form .grid { grid-template-columns: 1fr; }
     .form .actions { align-items: flex-start; flex-direction: column; }
@@ -214,6 +333,7 @@
       </a>
       <nav class="nav-links">
         <a href="#capabilities">Capabilities</a>
+        <a href="#catalog">Catalog</a>
         <a href="#reliability">Reliability</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -301,6 +421,34 @@
       </div>
     </section>
 
+    <section class="block" id="catalog">
+      <div class="wrap">
+        <div class="sec-label">Catalog</div>
+        <h2 class="sec-head">The distributed standard library.</h2>
+        <p class="sec-sub">Every service publishes the same metadata contract: name, function, dependencies, API, inputs, outputs, and runtime configuration.</p>
+        <div class="catalog-stats" aria-label="Service catalog statistics">
+          <div class="stat"><div class="v" id="statServices">—</div><div class="k">Services</div></div>
+          <div class="stat"><div class="v" id="statEdges">—</div><div class="k">Edges</div></div>
+          <div class="stat"><div class="v" id="statLeaf">—</div><div class="k">Leaf</div></div>
+          <div class="stat"><div class="v" id="statOrchestrators">—</div><div class="k">Orchestrators</div></div>
+          <div class="stat"><div class="v" id="statCategories">—</div><div class="k">Categories</div></div>
+        </div>
+        <div class="catalog-tools">
+          <input id="serviceSearch" type="search" placeholder="Search services, functions, dependencies" autocomplete="off" />
+          <select id="kindFilter" aria-label="Filter by kind">
+            <option value="">All kinds</option>
+          </select>
+          <select id="categoryFilter" aria-label="Filter by category">
+            <option value="">All categories</option>
+          </select>
+        </div>
+        <div class="graph-shell" aria-label="Dependency graph">
+          <svg id="depGraph" viewBox="0 0 760 390" role="img" aria-label="Dependency graph"></svg>
+        </div>
+        <div class="catalog-list" id="serviceList"></div>
+      </div>
+    </section>
+
     <section class="block" id="contact">
       <div class="wrap">
         <div class="sec-label">Contact</div>
@@ -370,6 +518,180 @@
     const submit = form.querySelector('button[type="submit"]');
     const originalSubmit = submit.textContent;
     document.getElementById('year').textContent = new Date().getFullYear();
+    const catalogState = { services: [], graph: { edges: [] } };
+    const search = document.getElementById('serviceSearch');
+    const kindFilter = document.getElementById('kindFilter');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const serviceList = document.getElementById('serviceList');
+    const depGraph = document.getElementById('depGraph');
+
+    const countBy = (items, test) => items.reduce((total, item) => total + (test(item) ? 1 : 0), 0);
+    const uniq = (items) => [...new Set(items)].sort((a, b) => a.localeCompare(b));
+    const svgEl = (name) => document.createElementNS('http://www.w3.org/2000/svg', name);
+
+    function setText(id, value) {
+      document.getElementById(id).textContent = value.toLocaleString();
+    }
+
+    function populateFilters(services) {
+      for (const kind of uniq(services.map((service) => service.kind))) {
+        const opt = document.createElement('option');
+        opt.value = kind;
+        opt.textContent = kind;
+        kindFilter.append(opt);
+      }
+
+      for (const category of uniq(services.flatMap((service) => service.categories || []))) {
+        const opt = document.createElement('option');
+        opt.value = category;
+        opt.textContent = category;
+        categoryFilter.append(opt);
+      }
+    }
+
+    function filteredServices() {
+      const term = search.value.trim().toLowerCase();
+      return catalogState.services.filter((service) => {
+        const deps = (service.dependencies || []).map((dep) => dep.slug).join(' ');
+        const haystack = `${service.name} ${service.slug} ${service.function} ${deps}`.toLowerCase();
+        return (!term || haystack.includes(term))
+          && (!kindFilter.value || service.kind === kindFilter.value)
+          && (!categoryFilter.value || (service.categories || []).includes(categoryFilter.value));
+      });
+    }
+
+    function renderList(services) {
+      serviceList.replaceChildren();
+      for (const service of services) {
+        const row = document.createElement('a');
+        row.className = 'service-row';
+        row.href = `https://github.com/${service.repository}`;
+        row.target = '_blank';
+        row.rel = 'noopener';
+
+        const name = document.createElement('div');
+        name.className = 'name';
+        name.textContent = service.name;
+
+        const kind = document.createElement('div');
+        kind.className = 'kind';
+        kind.textContent = service.kind;
+
+        const body = document.createElement('div');
+        const fn = document.createElement('div');
+        fn.className = 'fn';
+        fn.textContent = service.function;
+        const deps = document.createElement('div');
+        deps.className = 'deps';
+        deps.textContent = (service.dependencies || []).length
+          ? `depends on ${(service.dependencies || []).map((dep) => dep.service).join(', ')}`
+          : 'no dependencies';
+        body.append(fn, deps);
+        row.append(name, kind, body);
+        serviceList.append(row);
+      }
+    }
+
+    function renderGraph(services) {
+      depGraph.replaceChildren();
+      const visible = services
+        .filter((service) => (service.dependencies || []).length)
+        .slice(0, 28);
+      const depCounts = new Map();
+      for (const service of visible) {
+        for (const dep of service.dependencies || []) {
+          depCounts.set(dep.slug, (depCounts.get(dep.slug) || 0) + 1);
+        }
+      }
+      const depNodes = [...depCounts.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 22)
+        .map(([slug]) => slug);
+      const depY = new Map(depNodes.map((slug, i) => [slug, 42 + i * (306 / Math.max(1, depNodes.length - 1))]));
+      const serviceY = new Map(visible.map((service, i) => [service.slug, 42 + i * (306 / Math.max(1, visible.length - 1))]));
+
+      const title = svgEl('text');
+      title.setAttribute('x', '24');
+      title.setAttribute('y', '24');
+      title.setAttribute('fill', '#818d9f');
+      title.setAttribute('font-size', '12');
+      title.setAttribute('font-family', 'JetBrains Mono, monospace');
+      title.textContent = `${services.length} matching services · ${visible.length} rendered with dependencies`;
+      depGraph.append(title);
+
+      for (const service of visible) {
+        const y1 = serviceY.get(service.slug);
+        for (const dep of service.dependencies || []) {
+          if (!depY.has(dep.slug)) continue;
+          const y2 = depY.get(dep.slug);
+          const path = svgEl('path');
+          path.setAttribute('d', `M 170 ${y1} C 310 ${y1}, 450 ${y2}, 590 ${y2}`);
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke', 'rgba(59,143,238,0.28)');
+          path.setAttribute('stroke-width', '1');
+          depGraph.append(path);
+        }
+      }
+
+      for (const service of visible) {
+        const y = serviceY.get(service.slug);
+        const dot = svgEl('circle');
+        dot.setAttribute('cx', '170');
+        dot.setAttribute('cy', y);
+        dot.setAttribute('r', '4');
+        dot.setAttribute('fill', '#2bb6c2');
+        const text = svgEl('text');
+        text.setAttribute('x', '24');
+        text.setAttribute('y', y + 4);
+        text.setAttribute('fill', '#eef3fb');
+        text.setAttribute('font-size', '11');
+        text.setAttribute('font-family', 'JetBrains Mono, monospace');
+        text.textContent = service.slug;
+        depGraph.append(dot, text);
+      }
+
+      for (const slug of depNodes) {
+        const y = depY.get(slug);
+        const dot = svgEl('circle');
+        dot.setAttribute('cx', '590');
+        dot.setAttribute('cy', y);
+        dot.setAttribute('r', '4');
+        dot.setAttribute('fill', '#3b8fee');
+        const text = svgEl('text');
+        text.setAttribute('x', '606');
+        text.setAttribute('y', y + 4);
+        text.setAttribute('fill', '#eef3fb');
+        text.setAttribute('font-size', '11');
+        text.setAttribute('font-family', 'JetBrains Mono, monospace');
+        text.textContent = slug;
+        depGraph.append(dot, text);
+      }
+    }
+
+    function renderCatalog() {
+      const services = filteredServices();
+      renderGraph(services);
+      renderList(services);
+    }
+
+    fetch('/services.json')
+      .then((res) => res.json())
+      .then((catalog) => {
+        catalogState.services = catalog.services || [];
+        catalogState.graph = catalog.graph || { edges: [] };
+        setText('statServices', catalogState.services.length);
+        setText('statEdges', (catalogState.graph.edges || []).length);
+        setText('statLeaf', countBy(catalogState.services, (service) => service.kind === 'leaf'));
+        setText('statOrchestrators', countBy(catalogState.services, (service) => service.kind === 'orchestrator'));
+        setText('statCategories', uniq(catalogState.services.flatMap((service) => service.categories || [])).length);
+        populateFilters(catalogState.services);
+        renderCatalog();
+      });
+
+    for (const control of [search, kindFilter, categoryFilter]) {
+      control.addEventListener('input', renderCatalog);
+      control.addEventListener('change', renderCatalog);
+    }
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();

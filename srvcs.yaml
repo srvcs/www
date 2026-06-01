@@ -1,0 +1,58 @@
+schemaVersion: 1
+name: srvcs-www
+slug: www
+repository: srvcs/www
+package: srvcs-www
+function: "website: public srvcs.cloud site and service catalog"
+kind: website
+categories:
+  - website
+dependencies: []
+endpoints:
+  - method: GET
+    path: /
+    purpose: Website HTML or JSON identity
+  - method: GET
+    path: /services.json
+    purpose: Service catalog and dependency graph data
+  - method: GET
+    path: /assets/srvcs-logo.png
+    purpose: Logo asset
+  - method: GET
+    path: /assets/srvcs-social.png
+    purpose: Social preview asset
+  - method: GET
+    path: /site.webmanifest
+    purpose: Web app manifest
+  - method: GET
+    path: /robots.txt
+    purpose: Crawler policy
+  - method: GET
+    path: /sitemap.xml
+    purpose: Sitemap
+  - method: GET
+    path: /healthz
+    purpose: Liveness probe
+  - method: GET
+    path: /readyz
+    purpose: Readiness probe
+  - method: GET
+    path: /metrics
+    purpose: Prometheus metrics
+  - method: GET
+    path: /openapi.json
+    purpose: OpenAPI document
+inputs: []
+outputs:
+  - name: service
+    type: string
+configuration:
+  - name: SRVCS_BIND_ADDR
+    default: 0.0.0.0:8080
+    purpose: Bind address
+  - name: SRVCS_ENV
+    default: development
+    purpose: Environment label for logs
+  - name: RUST_LOG
+    default: info,tower_http=info
+    purpose: Tracing filter

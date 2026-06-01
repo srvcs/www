@@ -51,6 +51,7 @@ pub fn router(metrics: telemetry::MetricsHandle) -> Router {
         .route("/apple-touch-icon.png", get(api::apple_touch_icon_png))
         .route("/favicon.ico", get(api::logo_png))
         .route("/site.webmanifest", get(api::site_webmanifest))
+        .route("/services.json", get(api::services_json))
         .route("/robots.txt", get(api::robots_txt))
         .route("/sitemap.xml", get(api::sitemap_xml))
         .route("/healthz", get(health::healthz))

@@ -87,6 +87,10 @@ async fn index_serves_html_to_browsers() {
     assert!(html.contains("srvcs.cloud"));
     assert!(html.contains("Building focused, composable services"));
     assert!(html.contains("Flake-backed runtime"));
+    assert!(html.contains("The distributed standard library."));
+    assert!(html.contains("serviceSearch"));
+    assert!(html.contains("Dependency graph"));
+    assert!(html.contains("services.json"));
     assert!(html.contains("Bugs &amp; service proposals"));
     assert!(html.contains("Questions &amp; architecture debates"));
     assert!(html.contains("Service Proposal awaiting ARB review"));
@@ -131,6 +135,7 @@ async fn social_metadata_assets_ok() {
             "/site.webmanifest",
             "application/manifest+json; charset=utf-8",
         ),
+        ("/services.json", "application/json; charset=utf-8"),
     ] {
         let res = app
             .clone()
@@ -145,6 +150,28 @@ async fn social_metadata_assets_ok() {
             "{uri}"
         );
     }
+}
+
+#[tokio::test]
+async fn service_catalog_ok() {
+    let app = router(telemetry::metrics_handle_for_tests());
+    let res = app
+        .oneshot(
+            Request::builder()
+                .uri("/services.json")
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(res.status(), StatusCode::OK);
+    let body = res.into_body().collect().await.unwrap().to_bytes();
+    let json: Value = serde_json::from_slice(&body).unwrap();
+    assert_eq!(json["schemaVersion"], 1);
+    assert_eq!(json["serviceCount"], 201);
+    assert!(json["services"].as_array().unwrap().len() >= 201);
+    assert!(json["graph"]["edges"].as_array().unwrap().len() >= 300);
 }
 
 #[tokio::test]

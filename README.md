@@ -1,15 +1,64 @@
 # srvcs-www
 
-The `srvcs.cloud` website service.
+## Name
 
-This is a stamped srvcs microservice that serves the public website from
-`static/index.html` while keeping the shared operational surface:
+| Field | Value |
+| --- | --- |
+| Service | `srvcs-www` |
+| Slug | `www` |
+| Repository | `srvcs/www` |
+| Package | `srvcs-www` |
+| Kind | `website` |
 
-- `GET /` returns HTML for browser requests and JSON identity for API callers.
-- `GET /healthz`, `GET /readyz`, `GET /metrics`, and `GET /openapi.json` follow
-  the srvcs service standard.
+## Function
 
-## Local checks
+website: public srvcs.cloud site and service catalog
+
+## Dependencies
+
+None.
+
+## API
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/` | Website HTML or JSON identity |
+| `GET` | `/services.json` | Service catalog and dependency graph data |
+| `GET` | `/assets/srvcs-logo.png` | Logo asset |
+| `GET` | `/assets/srvcs-social.png` | Social preview asset |
+| `GET` | `/site.webmanifest` | Web app manifest |
+| `GET` | `/robots.txt` | Crawler policy |
+| `GET` | `/sitemap.xml` | Sitemap |
+| `GET` | `/healthz` | Liveness probe |
+| `GET` | `/readyz` | Readiness probe |
+| `GET` | `/metrics` | Prometheus metrics |
+| `GET` | `/openapi.json` | OpenAPI document |
+
+## Inputs
+
+This service accepts an empty or ignored request body.
+
+## Outputs
+
+| Name | Type |
+| --- | --- |
+| `service` | `string` |
+
+## Configuration
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `SRVCS_BIND_ADDR` | `0.0.0.0:8080` | Bind address |
+| `SRVCS_ENV` | `development` | Environment label for logs |
+| `RUST_LOG` | `info,tower_http=info` | Tracing filter |
+
+## Error Behavior
+
+- `422` means the request could not be evaluated for the documented input shape.
+- `503` means a required dependency was unavailable or returned an unexpected response.
+- Dependency validation errors are forwarded when this service delegates validation.
+
+## Local Checks
 
 ```sh
 nix flake check -L
@@ -30,34 +79,20 @@ If Docker rejects Nix sandbox setup with a seccomp error, retry with
 `--privileged` and add `--option sandbox false --option filter-syscalls false` to
 the Nix command.
 
-See [`srvcs/platform`](https://github.com/srvcs/platform) for the shared service
-standard and CI workflow.
-
-## Preview workflow
+## Preview Workflow
 
 Previews are maintainer opt-in.
 
 1. Open a PR from a branch inside `srvcs/www`.
-2. Add the `deploy-preview` label:
-
-   ```sh
-   gh pr edit <pr-number> --repo srvcs/www --add-label deploy-preview
-   ```
-
+2. Add the `deploy-preview` label.
 3. CI publishes `ghcr.io/srvcs/www:pr-<number>-<sha>`.
-4. `srvcs/infra` deploys the preview and comments the URL on the PR:
-
-   ```text
-   https://www-pr-<number>.srvcs.cloud
-   ```
-
-Removing the label or closing the PR asks infra to destroy the preview
-namespace.
+4. `srvcs/infra` deploys `https://www-pr-<number>.srvcs.cloud`.
+5. Removing the label or closing the PR asks infra to destroy the preview namespace.
 
 Fork PRs do not receive previews automatically. Move the reviewed change to a
 branch inside `srvcs/www` before adding `deploy-preview`.
 
-## Production promotion
+## Production Promotion
 
 Production is promoted through `srvcs/infra`, not directly from this repository.
 
@@ -67,9 +102,18 @@ Production is promoted through `srvcs/infra`, not directly from this repository.
 4. Merge the `srvcs/infra` promotion PR.
 5. Run the manual infra deploy workflow:
 
-   ```sh
-   gh workflow run deploy-prod.yml --repo srvcs/infra --ref main
-   ```
+```sh
+gh workflow run deploy-prod.yml --repo srvcs/infra --ref main
+```
 
 This split keeps website source, image publishing, production desired state, and
 live deployment as separate steps.
+
+## Metadata
+
+Machine-readable service metadata lives in `srvcs.yaml`. The website catalog is
+served from `static/services.json` and should be regenerated from service
+metadata whenever service docs change.
+
+See the [srvcs service standard](https://github.com/srvcs/platform/blob/main/STANDARD.md)
+for the full operational contract.

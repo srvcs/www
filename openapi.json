@@ -27,6 +27,17 @@
           }
         }
       }
+    },
+    "/services.json": {
+      "get": {
+        "tags": [],
+        "operationId": "services_json",
+        "responses": {
+          "200": {
+            "description": "Service catalog and dependency graph JSON"
+          }
+        }
+      }
     }
   },
   "components": {
